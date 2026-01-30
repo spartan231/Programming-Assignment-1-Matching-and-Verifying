@@ -51,7 +51,9 @@ def main():
             students[s_name] = parts
 
         # 5. Run Engine
-        matches = MatchingEngine(hospitals, students)
+        # Make copies for the matching engine since it modifies preferences
+        hospitals_copy = {h: prefs[:] for h, prefs in hospitals.items()}
+        matches = MatchingEngine(hospitals_copy, students)
         
         # 6. Output formatted as "i j"
         # We sort by hospital ID to ensure the output order matches the input order

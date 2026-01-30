@@ -43,35 +43,37 @@ def check_validity(hospital, student, match):
 
     # precompute ranks for fast preference comparison
     hospital_rank = {
-        h: {s: idx for idx, s in enumerate(prefs)}
+        h: {s: i for i, s in enumerate(prefs)}
         for h, prefs in hospital.items()
     }
     student_rank = {
-        s: {h: idx for idx, h in enumerate(prefs)}
+        s: {h: i for i, h in enumerate(prefs)}
         for s, prefs in student.items()
     }
 
     for h, h_prefs in hospital.items():
         current_s = match.get(h)
-        current_rank = hospital_rank.get(h, {}).get(current_s, float("inf"))
+        current_rank = hospital_rank[h].get(current_s, float("inf"))
 
         for s in h_prefs:
-            if hospital_rank.get(h, {}).get(s, float("inf")) >= current_rank:
+            s_rank_in_h = hospital_rank[h].get(s, float("inf"))
+            
+            # only students hospital prefers more (lower rank = higher preference)
+            if s_rank_in_h >= current_rank:
                 break
 
-            if s not in student:
+            # Check if s exists in student list and h is in s's preferences
+            if s not in student or h not in student_rank.get(s, {}):
                 continue
 
             s_current = student_match.get(s)
-            s_rank = student_rank.get(s, {})
 
+            # If student is unmatched or prefers h over current match -> blocking pair
             if s_current is None:
-                unstable_message = f"UNSTABLE: blocking pair ({h}, {s})"
-                break
-
-            if s_rank.get(h, float("inf")) < s_rank.get(s_current, float("inf")):
-                unstable_message = f"UNSTABLE: blocking pair ({h}, {s})"
-                break
+                return False, f"UNSTABLE: blocking pair ({h}, {s}) - student {s} unmatched"
+            
+            if student_rank[s][h] < student_rank[s][s_current]:
+                return False, f"UNSTABLE: blocking pair ({h}, {s}) - student prefers {h} over {s_current}"
 
         if unstable_message:
             break
