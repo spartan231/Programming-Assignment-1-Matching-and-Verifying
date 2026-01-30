@@ -3,6 +3,7 @@ import sys
 # If in the same folder: from matchingEngine import MatchingEngine
 # If in src: from src.matchingEngine import MatchingEngine
 from matchingEngine import MatchingEngine
+from verifier import check_validity
 
 def main():
     file_path = "data/sampleData.txt"
@@ -58,6 +59,12 @@ def main():
             h_name = str(i + 1)
             if h_name in matches:
                 print(f"{h_name} {matches[h_name]}")
+
+        # 7. Verify matches
+        is_valid, message = check_validity(hospitals, students, matches)
+        print(message)
+        if not is_valid:
+            return
 
     except StopIteration:
         print("Error: The file ended unexpectedly. Check if 'n' matches the actual number of lines.")
