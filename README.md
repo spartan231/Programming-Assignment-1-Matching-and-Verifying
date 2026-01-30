@@ -10,4 +10,4 @@ Instructions:
 Assumptions:
 
 Graph/Solution:  
-![alt text](./tests/scalability.png")
+![alt text](tests\scalability.png")
