@@ -1,9 +1,15 @@
 # Programming-Assignment-1-Matching-and-Verifying
 Implement the Gale Shapley algorithm for the hospital-student stable matching problem
 
-- Students:  
-    - Anthony Cao, 22989899
-    - #
+Students:  
+- Anthony Cao, 22989899
+- #
+
+Source Code:
+- Matching Engine - src/matchingEngine.py
+- Verifier - src/verifier.py
+- Input - data/sampleData.txt
+- Output - 
 
 Instructions:
 
